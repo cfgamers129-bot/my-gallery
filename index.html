@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Someone Special ✨</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: linear-gradient(135deg, #ffe5ec, #ffc2d1);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+            padding: 20px;
+        }
+        h1 {
+            color: #ff477e;
+            margin-bottom: 10px;
+            font-size: 24px;
+            text-align: center;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        p.hint {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .gallery-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 25px;
+            max-width: 800px;
+            perspective: 1000px; /* Gives 3D depth during movement */
+        }
+        .photo-card {
+            background: white;
+            padding: 12px 12px 25px 12px;
+            border-radius: 8px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+            cursor: pointer;
+            transition: transform 0.1s ease-out, box-shadow 0.3s ease;
+            position: relative;
+            width: 220px;
+            transform-style: preserve-3d;
+        }
+        .photo-card:hover {
+            box-shadow: 0 12px 20px rgba(0,0,0,0.2);
+        }
+        .photo-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 4px;
+            pointer-events: none;
+        }
+        /* Message Box Style */
+        .message-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+            padding: 20px;
+        }
+        .message-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .message-box {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+        }
+        .message-overlay.active .message-box {
+            transform: scale(1);
+        }
+        .message-box h2 {
+            color: #ff477e;
+            margin-bottom: 15px;
+        }
+        .message-box p {
+            color: #333;
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+        .close-btn {
+            background: #ff477e;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        .close-btn:hover {
+            background: #ff7096;
+        }
+        /* Secure Permission Request Banner */
+        #permission-banner {
+            display: none;
+            background: white;
+            padding: 15px 25px;
+            border-radius: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            z-index: 99;
+        }
+        #permission-btn {
+            background: #ff477e;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Hey! ✨</h1>
+    <p class="hint">(Try tilting/jiggling your mobile phone or click a picture)</p>
+    
+    <!-- Permission banner for modern browser requirements -->
+    <div id="permission-banner">
+        <span>Enable fluid motion effect?</span>
+        <button id="permission-btn">Yes, Turn On</button>
+    </div>
+
+    <div class="gallery-container">
+        <!-- Photo 1 -->
+        <div class="photo-card" onclick="showMessage('You look beautiful in this picture! 😊')">
+            <img src="pic1.jpg" alt="Photo 1">
+        </div>
+        
+        <!-- Photo 2 -->
+        <div class="photo-card" onclick="showMessage('This one has a great vibe! ✨')">
+            <img src="pic2.jpg" alt="Photo 2">
+        </div>
+
+        <!-- Photo 3 -->
+        <div class="photo-card" onclick="showMessage('Keep smiling always! 🌸')">
+            <img src="pic3.jpg" alt="Photo 3">
+        </div>
+    </div>
+
+    <!-- Popup Message System -->
+    <div class="message-overlay" id="msg-overlay">
+        <div class="message-box">
+            <h2>A Message For You</h2>
+            <p id="popup-text">Custom Text Goes Here</p>
+            <button class="close-btn" onclick="closeMessage()">Close</button>
+        </div>
+    </div>
+// Webpage khullei prothome eita run hobe
+const password = prompt("Enter the secret key to enter:");
+if (password !== "msd07") { 
+    alert("Wrong password!");
+    document.body.innerHTML = "<h2 style='color:#ff477e; text-align:center; margin-top:20vh;'>Access Denied. 🔒</h2>";
+}
+
+    <script>
+        const cards = document.querySelectorAll('.photo-card');
+        const overlay = document.getElementById('msg-overlay');
+        const popupText = document.getElementById('popup-text');
+        const permissionBanner = document.getElementById('permission-banner');
+        const permissionBtn = document.getElementById('permission-btn');
+
+        // --- New Handlers for Jiggle / Motion Tracking ---
+        function handleMotion(event) {
+            let tiltX = event.gamma ? event.gamma : 0; // Left-to-Right
+            let tiltY = event.beta ? event.beta : 0;   // Front-to-Back
+
+            // Normalizing viewing angles (limits how far cards can jump/slide)
+            let moveX = Math.max(-30, Math.min(30, tiltX));
+            let moveY = Math.max(-30, Math.min(30, tiltY - 45)); 
+
+            cards.forEach((card, index) => {
+                // Alternating multipliers gives an asymmetrical organic movement
+                let multiplier = (index % 2 === 0) ? 0.75 : 0.45;
+                let currentX = moveX * multiplier;
+                let currentY = moveY * multiplier;
+                
+                // Applies translation and a slight rotation to make it feel like real paper card floating
+                card.style.transform = `translate3d(${currentX}px, ${currentY}px, 0px) rotateY(${currentX * 0.1}deg) rotateX(${-currentY * 0.1}deg)`;
+            });
+        }
+
+        // Handle modern dynamic sensor security blocks
+        if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+            // Specifically for iOS/Safari or high-security mobile environment
+            permissionBanner.style.display = 'block';
+            permissionBtn.addEventListener('click', () => {
+                DeviceOrientationEvent.requestPermission()
+                    .then(permissionState => {
+                        if (permissionState === 'granted') {
+                            permissionBanner.style.display = 'none';
+                            window.addEventListener('deviceorientation', handleMotion, true);
+                        }
+                    })
+                    .catch(console.error);
+            });
+        } else {
+            // Android Chrome and standard direct fallbacks
+            window.addEventListener('deviceorientation', handleMotion, true);
+            window.addEventListener('deviceorientationabsolute', handleMotion, true);
+        }
+
+        // --- Popup System Controls ---
+        function showMessage(text) {
+            popupText.innerText = text;
+            overlay.classList.add('active');
+        }
+
+        function closeMessage() {
+            overlay.classList.remove('active');
+        }
+    </script>
+</body>
+</html>
