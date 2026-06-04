@@ -72,9 +72,9 @@
             border-radius: 8px;
             box-shadow: 0 8px 16px rgba(0,0,0,0.15);
             cursor: pointer;
-            transition: transform 0.1s ease-out, box-shadow 0.3s ease;
+            transition: transform 0.05s ease-out, box-shadow 0.3s ease; /* Snappier transition for intense jiggle */
             position: relative;
-            width: 180px; /* Small card size retained */
+            width: 180px; 
             transform-style: preserve-3d;
         }
         .photo-card:hover {
@@ -82,7 +82,7 @@
         }
         .photo-card img {
             width: 100%;
-            height: 210px; /* Small image height retained */
+            height: 210px; 
             object-fit: cover;
             border-radius: 4px;
             pointer-events: none;
@@ -222,20 +222,23 @@
         const permissionBanner = document.getElementById('permission-banner');
         const permissionBtn = document.getElementById('permission-btn');
 
-        // --- Handlers for Jiggle / Motion Tracking ---
+        // --- Handlers for Increased Jiggle / Motion Tracking ---
         function handleMotion(event) {
             let tiltX = event.gamma ? event.gamma : 0; 
             let tiltY = event.beta ? event.beta : 0;   
 
+            // Limits how far the sensors track
             let moveX = Math.max(-30, Math.min(30, tiltX));
             let moveY = Math.max(-30, Math.min(30, tiltY - 45)); 
 
             cards.forEach((card, index) => {
-                let multiplier = (index % 2 === 0) ? 0.75 : 0.45;
+                // INCREASED MULTIPLIERS: Boosted from 0.75/0.45 to 2.5/1.8 for dramatic motion
+                let multiplier = (index % 2 === 0) ? 2.5 : 1.8;
                 let currentX = moveX * multiplier;
                 let currentY = moveY * multiplier;
                 
-                card.style.transform = `translate3d(${currentX}px, ${currentY}px, 0px) rotateY(${currentX * 0.1}deg) rotateX(${-currentY * 0.1}deg)`;
+                // INCREASED ROTATION SENSITIVITY: Changed from 0.1 to 0.4 for distinct 3D turning
+                card.style.transform = `translate3d(${currentX}px, ${currentY}px, 0px) rotateY(${currentX * 0.4}deg) rotateX(${-currentY * 0.4}deg)`;
             });
         }
 
