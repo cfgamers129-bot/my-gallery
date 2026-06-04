@@ -36,36 +36,6 @@
             margin-bottom: 25px;
             text-align: center;
         }
-        .gallery-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-            max-width: 700px;
-            perspective: 1000px; /* Gives 3D depth during movement */
-            margin-bottom: 30px;
-        }
-        .photo-card {
-            background: white;
-            padding: 10px 10px 20px 10px;
-            border-radius: 8px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
-            cursor: pointer;
-            transition: transform 0.1s ease-out, box-shadow 0.3s ease;
-            position: relative;
-            width: 180px; /* Made the card size smaller */
-            transform-style: preserve-3d;
-        }
-        .photo-card:hover {
-            box-shadow: 0 12px 20px rgba(0,0,0,0.2);
-        }
-        .photo-card img {
-            width: 100%;
-            height: 210px; /* Made the image height smaller */
-            object-fit: cover;
-            border-radius: 4px;
-            pointer-events: none;
-        }
         
         /* Sweet "Pookie" Font Message Styling */
         .birthday-message {
@@ -74,7 +44,7 @@
             color: #ff477e;
             font-size: 24px;
             line-height: 1.6;
-            margin-top: 10px;
+            margin-bottom: 30px; /* Space between message and gallery */
             text-shadow: 1px 1px 1px rgba(0,0,0,0.05);
         }
         .birthday-message .main-wish {
@@ -86,6 +56,36 @@
         .birthday-message .sub-text {
             color: #555;
             font-size: 22px;
+        }
+
+        .gallery-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            max-width: 700px;
+            perspective: 1000px; /* Gives 3D depth during movement */
+        }
+        .photo-card {
+            background: white;
+            padding: 10px 10px 20px 10px;
+            border-radius: 8px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+            cursor: pointer;
+            transition: transform 0.1s ease-out, box-shadow 0.3s ease;
+            position: relative;
+            width: 180px; /* Small card size retained */
+            transform-style: preserve-3d;
+        }
+        .photo-card:hover {
+            box-shadow: 0 12px 20px rgba(0,0,0,0.2);
+        }
+        .photo-card img {
+            width: 100%;
+            height: 210px; /* Small image height retained */
+            object-fit: cover;
+            border-radius: 4px;
+            pointer-events: none;
         }
 
         /* Message Box Style */
@@ -179,6 +179,13 @@
         <button id="permission-btn">Yes, Turn On</button>
     </div>
 
+    <div class="birthday-message">
+        <div class="main-wish">happy birthday amu</div>
+        <div>chai paglu (sorry)</div>
+        <div class="sub-text">enjoy ur day and do the stuffs what u wanna do</div>
+        <div class="sub-text">in return i don't want anything 👍</div>
+    </div>
+
     <div class="gallery-container">
         <div class="photo-card" onclick="showMessage('You look beautiful in this picture! 😊')">
             <img src="pic1.jpg" alt="Photo 1">
@@ -191,13 +198,6 @@
         <div class="photo-card" onclick="showMessage('Keep smiling always! 🌸')">
             <img src="pic3.jpg" alt="Photo 3">
         </div>
-    </div>
-
-    <div class="birthday-message">
-        <div class="main-wish">happy birthday amu</div>
-        <div>chai paglu (sorry)</div>
-        <div class="sub-text">enjoy ur day and do the stuffs what u wanna do</div>
-        <div class="sub-text">in return i don't want anything 👍</div>
     </div>
 
     <div class="message-overlay" id="msg-overlay">
@@ -224,25 +224,21 @@
 
         // --- Handlers for Jiggle / Motion Tracking ---
         function handleMotion(event) {
-            let tiltX = event.gamma ? event.gamma : 0; // Left-to-Right
-            let tiltY = event.beta ? event.beta : 0;   // Front-to-Back
+            let tiltX = event.gamma ? event.gamma : 0; 
+            let tiltY = event.beta ? event.beta : 0;   
 
-            // Normalizing viewing angles (limits how far cards can jump/slide)
             let moveX = Math.max(-30, Math.min(30, tiltX));
             let moveY = Math.max(-30, Math.min(30, tiltY - 45)); 
 
             cards.forEach((card, index) => {
-                // Alternating multipliers gives an asymmetrical organic movement
                 let multiplier = (index % 2 === 0) ? 0.75 : 0.45;
                 let currentX = moveX * multiplier;
                 let currentY = moveY * multiplier;
                 
-                // Applies translation and a slight rotation to make it feel like real paper card floating
                 card.style.transform = `translate3d(${currentX}px, ${currentY}px, 0px) rotateY(${currentX * 0.1}deg) rotateX(${-currentY * 0.1}deg)`;
             });
         }
 
-        // Handle modern dynamic sensor security blocks
         if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
             permissionBanner.style.display = 'block';
             permissionBtn.addEventListener('click', () => {
